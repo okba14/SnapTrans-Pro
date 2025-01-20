@@ -84,7 +84,7 @@ A big thank you to the open-source community for their continuous contributions 
 
 ---
 
-Made with ❤️ by [Your Name](https://github.com/okba14)
+Made with ❤️ by [Okba_Elkantara](https://github.com/okba14)
 
 ---
 
