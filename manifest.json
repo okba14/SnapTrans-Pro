@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "SnapTrans Pro",
+  "version": "1.0",
+  "description": "Take screenshots, record browser video, and translate text using AI",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "<all_urls>",
+    "storage",
+    "downloads",
+    "clipboardWrite"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png"
+    }
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png"
+  }
+}

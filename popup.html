@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapTrans Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/@huggingface/inference@2.6.4/dist/umd/index.min.js"></script>
+</head>
+<body class="w-96 bg-gray-900 text-white p-6">
+  <!-- Auth Container -->
+  <div id="authContainer" class="space-y-6">
+    <div class="flex items-center justify-center mb-6">
+      <div class="flex items-center space-x-2">
+        <svg class="w-8 h-8 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        <span class="text-xl font-bold text-blue-500">SnapTrans Pro</span>
+      </div>
+    </div>
+
+    <!-- Language Selector -->
+    <div class="flex justify-end mb-4">
+      <select id="langSelector" class="bg-gray-800 text-white rounded-lg p-1 text-sm border border-gray-700">
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+      </select>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm" class="space-y-4">
+      <h2 class="text-xl font-bold text-center" data-en="Login" data-ar="تسجيل الدخول">Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" class="w-full bg-gray-800 rounded-lg p-2 border border-gray-700">
+      <input type="password" id="loginPassword" placeholder="Password" class="w-full bg-gray-800 rounded-lg p-2 border border-gray-700">
+      <button id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300" data-en="Login" data-ar="تسجيل الدخول">Login</button>
+      <p class="text-center text-sm">
+        <span data-en="Don't have an account?" data-ar="ليس لديك حساب؟">Don't have an account?</span>
+        <a href="#" id="showSignup" class="text-blue-500 hover:text-blue-400" data-en="Sign up" data-ar="إنشاء حساب">Sign up</a>
+      </p>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signupForm" class="hidden space-y-4">
+      <h2 class="text-xl font-bold text-center" data-en="Create Account" data-ar="إنشاء حساب">Create Account</h2>
+      <input type="text" id="signupName" placeholder="Full Name" class="w-full bg-gray-800 rounded-lg p-2 border border-gray-700">
+      <input type="email" id="signupEmail" placeholder="Email" class="w-full bg-gray-800 rounded-lg p-2 border border-gray-700">
+      <input type="password" id="signupPassword" placeholder="Password" class="w-full bg-gray-800 rounded-lg p-2 border border-gray-700">
+      <button id="signupBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300" data-en="Sign up" data-ar="إنشاء حساب">Sign up</button>
+      <p class="text-center text-sm">
+        <span data-en="Already have an account?" data-ar="لديك حساب بالفعل؟">Already have an account?</span>
+        <a href="#" id="showLogin" class="text-blue-500 hover:text-blue-400" data-en="Login" data-ar="تسجيل الدخول">Login</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Main App Container (Initially Hidden) -->
+  <div id="appContainer" class="hidden space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <svg class="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        <span class="text-lg font-bold text-blue-500">SnapTrans Pro</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <select id="appLangSelector" class="bg-gray-800 text-white rounded-lg p-1 text-sm border border-gray-700">
+          <option value="en">English</option>
+          <option value="ar">العربية</option>
+        </select>
+        <button id="logoutBtn" class="text-sm text-gray-400 hover:text-white">
+          <span data-en="Logout" data-ar="تسجيل الخروج">Logout</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Capture Tools -->
+    <div class="space-y-4">
+      <button id="screenshot" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+        <span data-en="Take Screenshot" data-ar="التقاط صورة">Take Screenshot</span>
+      </button>
+      
+      <button id="startRecord" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+        <span data-en="Start Recording" data-ar="بدء التسجيل">Start Recording</span>
+      </button>
+
+      <button id="stopRecord" class="hidden w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+        <span data-en="Stop Recording" data-ar="إيقاف التسجيل">Stop Recording</span>
+      </button>
+    </div>
+
+    <!-- Translation Section -->
+    <div class="space-y-3">
+      <textarea id="textToTranslate" class="w-full h-24 bg-gray-800 text-white rounded-lg p-2 border border-gray-700" data-en-placeholder="Enter text to translate..." data-ar-placeholder="أدخل النص للترجمة..."></textarea>
+      
+      <div class="flex space-x-2">
+        <select id="targetLang" class="bg-gray-800 text-white rounded-lg p-2 border border-gray-700">
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+          <option value="de">Deutsch</option>
+          <option value="it">Italiano</option>
+          <option value="ar">العربية</option>
+        </select>
+        
+        <button id="translate" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+          <span data-en="Translate" data-ar="ترجم">Translate</span>
+        </button>
+      </div>
+
+      <div id="translationResult" class="bg-gray-800 rounded-lg p-3 min-h-[60px] border border-gray-700"></div>
+    </div>
+
+    <!-- Social Links -->
+    <div class="flex justify-center space-x-4 pt-4 border-t border-gray-700">
+      <a href="https://facebook.com/maronyo.okba" target="_blank" class="text-gray-400 hover:text-white">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+      </a>
+      <a href="https://instagram.com/okba_elkantara" target="_blank" class="text-gray-400 hover:text-white">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
+      <a href="https://github.com/okba14" target="_blank" class="text-gray-400 hover:text-white">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+      </a>
+      <a href="mailto:techokba@gmail.com" class="text-gray-400 hover:text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+      </a>
+    </div>
+  </div>
+  <script src="translations.js"></script>
+  <script src="auth.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
